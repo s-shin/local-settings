@@ -1,0 +1,13 @@
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'Local Settings'
+      'submenu': [
+        { 'label': 'Enable', 'command': 'local-settings:enable' }
+        { 'label': 'Disable', 'command': 'local-settings:disable' }
+        { 'label': 'Reload', 'command': 'local-settings:reload' }
+      ]
+    ]
+  }
+]

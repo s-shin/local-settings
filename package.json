@@ -1,0 +1,22 @@
+{
+  "name": "local-settings",
+  "main": "./lib/local-settings",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Apply project-local settings to current ones.",
+  "activationEvents": [
+    "local-settings:enable",
+    "local-settings:disable",
+    "local-settings:reload"
+  ],
+  "repository": "https://github.com/s-shin/local-settings",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+    "lodash": "^2.4.1",
+    "season": "^2.0.0",
+    "temp": "^0.8.0"
+  }
+}
