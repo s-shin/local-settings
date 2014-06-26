@@ -3,7 +3,7 @@ Local Settings
 
 This package allows you to extend the current config with project-local settings.
 
-![demo](demo.gif)
+![demo](https://raw.githubusercontent.com/s-shin/local-settings/master/demo.gif)
 
 Installation
 ------------
