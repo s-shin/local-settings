@@ -24,9 +24,12 @@ Usage
 Configuration
 -------------
 
-You can change the project-local config file name.
+You can configure some settings by `config.cson`.
 
 ```
 'local-settings':
   'configFileName': '.atomrc' # '.cson' is automatically appended
+  'autoEnable': false # if true, enable local settings on opening project
 ```
+
+If you change `config.cson`, do `Window: Reload`.

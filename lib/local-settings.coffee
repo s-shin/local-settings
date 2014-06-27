@@ -4,28 +4,23 @@ path = require "path"
 temp = require("temp").track()
 CSON = require "season"
 
-CFG =
-  configFileName:
-    key: "local-settings.configFileName"
-    default: ".atomrc"
-
 module.exports =
 
-  configFileName: CFG.configFileName.default
+  configFileName: ".atomrc"
 
   activate: (state) ->
     @isEnabled = false
 
-    atom.config.observe CFG.configFileName.key, =>
-      @configFileName = atom.config.get(CFG.configFileName.key) \
-        or CFG.configFileName.default
+    configFilePath = atom.config.get("local-settings.configFilePath")
+    @configFileName = configFilePath if configFilePath
+
+    @enable() if atom.config.get("local-settings.autoEnable")
 
     atom.workspaceView.command "local-settings:enable", => @enable()
     atom.workspaceView.command "local-settings:disable", => @disable()
     atom.workspaceView.command "local-settings:reload", => @disable => @enable()
 
-  destroy: ->
-    atom.config.unobserve CFG.configFileName.key
+  deactivate: ->
     temp.cleanupSync()
 
   enable: ->
