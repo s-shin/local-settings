@@ -3,6 +3,7 @@ fs = require "fs"
 path = require "path"
 temp = require("temp").track()
 CSON = require "season"
+{CompositeDisposable} = require "event-kit"
 
 module.exports =
 
@@ -14,14 +15,17 @@ module.exports =
     configFilePath = atom.config.get("local-settings.configFilePath")
     @configFileName = configFilePath if configFilePath
 
-    @enable() if atom.config.get("local-settings.autoEnable")
+    @subscriptions = new CompositeDisposable
+    @subscriptions.add atom.commands.add "atom-workspace",
+      "local-settings:enable": => @enable()
+      "local-settings:disable": => @disable()
+      "local-settings:reload": => @disable => @enable()
 
-    atom.workspaceView.command "local-settings:enable", => @enable()
-    atom.workspaceView.command "local-settings:disable", => @disable()
-    atom.workspaceView.command "local-settings:reload", => @disable => @enable()
+    @enable() if atom.config.get("local-settings.autoEnable")
 
   deactivate: ->
     temp.cleanupSync()
+    @subscriptions.dispose()
 
   enable: ->
     return if @isEnabled
@@ -29,7 +33,8 @@ module.exports =
     # save current config file path
     @defaultConfigPath = atom.config.configFilePath
     # load local config file in the current workspace
-    localConfigPath = CSON.resolve path.join(atom.project.path, @configFileName)
+    projectPath = atom.project.getPath()
+    localConfigPath = CSON.resolve path.join(projectPath, @configFileName)
     return unless localConfigPath
     CSON.readFile localConfigPath, (err, localConfigData) =>
       return console.error err if err
