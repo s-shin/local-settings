@@ -33,7 +33,7 @@ module.exports =
     # save current config file path
     @defaultConfigPath = atom.config.configFilePath
     # load local config file in the current workspace
-    projectPath = atom.project.getPath()
+    projectPath = atom.project.getPaths()[0]
     localConfigPath = CSON.resolve path.join(projectPath, @configFileName)
     return unless localConfigPath
     CSON.readFile localConfigPath, (err, localConfigData) =>

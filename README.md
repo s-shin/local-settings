@@ -33,3 +33,9 @@ You can configure some settings by `config.cson`.
 ```
 
 If you change `config.cson`, do `Window: Reload`.
+
+Notice
+------
+
+Currently the config file in the first project is used in any projects
+when you load multiple projects in the tree view.
