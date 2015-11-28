@@ -6,14 +6,28 @@ CSON = require "season"
 {CompositeDisposable} = require "event-kit"
 
 module.exports =
-
-  configFileName: ".atomrc"
+  config:
+    autoEnable:
+      title: "Auto-Enable"
+      description: """
+      Whether to automatically load the local settings file
+      when the project is opened.
+      """
+      type: "boolean"
+      default: true
+    configFilePath:
+      title: "Local Configuration File Name"
+      description: """
+      This is the name of the file containing the local settings.\n
+      **Note that the *.cson* is appended automatically.**
+      """
+      type: "string"
+      default: ".atomrc"
 
   activate: (state) ->
     @isEnabled = false
 
-    configFilePath = atom.config.get("local-settings.configFilePath")
-    @configFileName = configFilePath if configFilePath
+    @configFileName = atom.config.get("local-settings.configFilePath")
 
     @subscriptions = new CompositeDisposable
     @subscriptions.add atom.commands.add "atom-workspace",
@@ -21,7 +35,15 @@ module.exports =
       "local-settings:disable": => @disable()
       "local-settings:reload": => @disable => @enable()
 
-    @enable() if atom.config.get("local-settings.autoEnable")
+    @subscriptions.add \
+      atom.config.onDidChange "local-settings.configFilePath", ({newValue}) =>
+        @configFileName = newValue || @config.configFilePath.default
+        @disable => @enable() if @isEnabled
+
+    # wait a few milliseconds so that enable correctly.
+    setTimeout =>
+      @enable() if atom.config.get("local-settings.autoEnable")
+    , 100
 
   deactivate: ->
     temp.cleanupSync()
