@@ -56,6 +56,8 @@ module.exports =
     @defaultConfigPath = atom.config.configFilePath
     # load local config file in the current workspace
     projectPath = atom.project.getPaths()[0]
+    # Fix for issue #6 - when path is undefinied Atom throws error
+    return if projectPath == undefined
     localConfigPath = CSON.resolve path.join(projectPath, @configFileName)
     return unless localConfigPath
     CSON.readFile localConfigPath, (err, localConfigData) =>
